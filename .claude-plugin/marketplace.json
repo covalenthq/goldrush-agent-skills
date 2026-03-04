@@ -1,0 +1,36 @@
+{
+    "name": "goldrush-agent-skills",
+    "owner": {
+      "name": "Covalent"
+    },
+    "metadata": {
+      "description": "Structured blockchain API skills for AI agents — spec-compliant endpoint routing, workflows, and integration patterns for 100+ chains. Eliminates hallucinated API calls across REST, WebSocket streaming, CLI, and pay-per-request (x402) interfaces.",
+      "version": "1.0.0"
+    },
+    "plugins": [
+      {
+        "name": "goldrush-foundational-api",
+        "source": "./goldrush-foundational-api",
+        "skills": "./",
+        "description": "REST API for historical and near-real-time data across 100+ chains — balances, transactions, NFTs, prices."
+      },
+      {
+        "name": "goldrush-streaming-api",
+        "source": "./goldrush-streaming-api",
+        "skills": "./",
+        "description": "Real-time GraphQL subscriptions over WebSocket — OHLCV candles, DEX pairs, wallet activity"
+      },
+      {
+        "name": "goldrush-cli",
+        "source": "./goldrush-cli",
+        "skills": "./",
+        "description": "Terminal-first blockchain data tool with MCP support for Claude Desktop and Claude Code"
+      },
+      {
+        "name": "goldrush-x402",
+        "source": "./goldrush-x402",
+        "skills": "./",
+        "description": "Pay-per-request blockchain data via the x402 protocol — no API key, no signup, just a funded wallet"
+      }
+    ]
+  }
