@@ -1,6 +1,15 @@
 ---
 name: goldrush-streaming-api
-description: "GoldRush Streaming API — real-time blockchain data via GraphQL subscriptions over WebSocket. Use this skill whenever the user needs live price feeds (OHLCV candles), real-time DEX pair monitoring (new pairs, liquidity updates), wallet activity streaming, decoded swap/transfer events, token search, trader PnL analysis, or any sub-second latency blockchain event push. This is the right skill for trading bots, live dashboards, alerting systems, copy-trading, DEX sniping, and real-time analytics. Also covers one-time GraphQL queries for token discovery and profitability analysis. If the user needs historical data, batch queries, or paginated REST results, use goldrush-foundational-api instead. If the user needs pay-per-request access without an API key, use goldrush-x402 instead."
+description: "Real-time blockchain data via GoldRush GraphQL subscriptions over WebSocket. Use for OHLCV price feeds, DEX pair monitoring, wallet activity streaming, decoded swap events, token search, and trader PnL. Right for trading bots, live dashboards, and sub-second feeds. For historical or batch data, use goldrush-foundational-api. For pay-per-request, use goldrush-x402."
+version: 1.0.0
+metadata:
+  openclaw:
+    homepage: https://goldrush.dev/docs/
+    primaryEnv: GOLDRUSH_API_KEY
+    envVars:
+      - name: GOLDRUSH_API_KEY
+        required: true
+        description: GoldRush API key from goldrush.dev — sent in the WebSocket `connection_init` payload.
 ---
 
 # GoldRush Streaming API

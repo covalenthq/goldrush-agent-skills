@@ -1,6 +1,15 @@
 ---
 name: goldrush-x402
-description: "GoldRush x402 — pay-per-request blockchain data access using the x402 protocol (HTTP 402 Payment Required). Use this skill whenever the user is building an AI agent that needs blockchain data without API keys, wants wallet-based micropayments for on-chain data, needs autonomous or no-account access to the GoldRush API, mentions the x402 protocol, or wants no-signup/no-onboarding blockchain data access. This is the right skill for autonomous agents, serverless applications, and prototyping without onboarding. Provides access to 60+ Foundational API endpoints through a transparent reverse proxy with stablecoin payments on Base. If the user needs a traditional API key with monthly billing, use goldrush-foundational-api instead. If the user needs real-time streaming data via WebSocket, use goldrush-streaming-api instead."
+description: "Pay-per-request blockchain data via the x402 protocol (HTTP 402) — no API key, just a funded EVM wallet. Use for autonomous agents needing GoldRush data with wallet-based USDC micropayments on Base, or no-signup access to 60+ Foundational endpoints. For traditional API key billing, use goldrush-foundational-api. For real-time WebSocket, use goldrush-streaming-api."
+version: 1.0.0
+metadata:
+  openclaw:
+    homepage: https://x402.goldrush.dev
+    primaryEnv: WALLET_PRIVATE_KEY
+    envVars:
+      - name: WALLET_PRIVATE_KEY
+        required: true
+        description: EVM private key used to sign stablecoin payments (USDC on Base). Treat as a secret — never share or commit.
 ---
 
 # GoldRush x402

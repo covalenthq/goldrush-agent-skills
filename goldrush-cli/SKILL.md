@@ -1,6 +1,14 @@
 ---
 name: goldrush-cli
-description: "GoldRush CLI — terminal-first blockchain data tool with MCP support for Claude Desktop and Claude Code. Use this skill whenever the user wants to query blockchain data from the command line, stream DEX pairs or wallet activity in a terminal, set up GoldRush as an MCP tool provider, or run quick one-off queries without writing code (e.g., 'check a wallet balance', 'what's the gas price', 'search for a token'). Also use this when the user mentions 'goldrush' CLI commands, 'npx @covalenthq/goldrush-cli', or MCP integration with GoldRush. The CLI is the fastest path for ad-hoc blockchain lookups from the terminal. If the user needs programmatic API access in an application, use goldrush-foundational-api or goldrush-streaming-api instead. If the user needs pay-per-request access without an API key, use goldrush-x402 instead."
+description: "Terminal CLI for GoldRush blockchain data with built-in MCP support for Claude. Use for command-line wallet balance lookups, DEX pair streaming, gas prices, token search, or registering GoldRush as an MCP tool provider via `goldrush install`. For programmatic API use, see goldrush-foundational-api or goldrush-streaming-api."
+version: 1.0.0
+metadata:
+  openclaw:
+    homepage: https://goldrush.dev/docs/
+    envVars:
+      - name: GOLDRUSH_API_KEY
+        required: false
+        description: Optional. The CLI prefers `goldrush auth`, which stores the key in the OS keychain.
 ---
 
 # GoldRush CLI

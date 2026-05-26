@@ -1,6 +1,15 @@
 ---
 name: goldrush-foundational-api
-description: "GoldRush Foundational API — REST API for historical and near-real-time blockchain data across 100+ chains. Use this skill whenever the user needs wallet token balances, transaction history, NFT holdings, token prices, token approvals, cross-chain activity, block data, portfolio value tracking, or any on-chain data query via REST. This is the default skill for blockchain data lookups, portfolio dashboards, tax tools, compliance checks, block explorers, and any application that fetches historical or current chain data. If the user needs real-time streaming or WebSocket push data, use goldrush-streaming-api instead. If the user needs pay-per-request access without an API key, use goldrush-x402 instead."
+description: "REST API for blockchain data across 100+ chains via GoldRush. Use for wallet token balances, transaction history, NFT holdings, token prices, approvals, cross-chain activity, and portfolio queries. For real-time/WebSocket push, use goldrush-streaming-api. For pay-per-request without an API key, use goldrush-x402."
+version: 1.0.0
+metadata:
+  openclaw:
+    homepage: https://goldrush.dev/docs/
+    primaryEnv: GOLDRUSH_API_KEY
+    envVars:
+      - name: GOLDRUSH_API_KEY
+        required: true
+        description: "GoldRush API key from goldrush.dev — sent as `Authorization: Bearer` header."
 ---
 
 # GoldRush Foundational API

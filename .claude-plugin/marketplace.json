@@ -1,7 +1,7 @@
 {
     "name": "goldrush-agent-skills",
     "owner": {
-      "name": "Covalent"
+      "name": "GoldRush"
     },
     "metadata": {
       "description": "Structured blockchain API skills for AI agents — spec-compliant endpoint routing, workflows, and integration patterns for 100+ chains. Eliminates hallucinated API calls across REST, WebSocket streaming, CLI, and pay-per-request (x402) interfaces.",
