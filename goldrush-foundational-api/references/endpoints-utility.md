@@ -1,6 +1,6 @@
 # Utility Endpoints
 
-## Get a block
+## Block API
 
 **Operation Identity:**
 - Operation ID: `getBlock`
@@ -22,34 +22,36 @@
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `updated_at` | string | The timestamp when the response was generated. Useful to show data staleness to users. |
-| `chain_id` | integer | The requested chain ID eg: `1`. |
-| `chain_name` | string | The requested chain name eg: `eth-mainnet`. |
-| `items` | array | List of response items. |
+| `updated_at` | `string` | The timestamp when the response was generated. Useful to show data staleness to users. |
+| `chain_id` | `integer` | The requested chain ID eg: `1`. |
+| `chain_name` | `string` | The requested chain name eg: `eth-mainnet`. |
+| `items` | `array` | List of response items. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `block_hash` | string | The hash of the block. |
-| `signed_at` | string | The block signed timestamp in UTC. |
-| `height` | integer | The block height. |
-| `block_parent_hash` | string | The parent block hash. |
-| `extra_data` | string | Extra data written to the block. |
-| `miner_address` | string | The address of the miner. |
-| `mining_cost` | integer | The associated mining cost. |
-| `gas_used` | integer | The associated gas used. |
-| `gas_limit` | integer | The associated gas limit. |
-| `transactions_link` | string | The link to the related tx by block endpoint. |
+| `block_hash` | `string` | The hash of the block. |
+| `signed_at` | `string` | The block signed timestamp in UTC. |
+| `height` | `integer` | The block height. |
+| `block_parent_hash` | `string` | The parent block hash. |
+| `extra_data` | `string` | Extra data written to the block. |
+| `miner_address` | `string` | The address of the miner. |
+| `mining_cost` | `integer` | The associated mining cost. |
+| `gas_used` | `integer` | The associated gas used. |
+| `gas_limit` | `integer` | The associated gas limit. |
+| `transactions_link` | `string` | The link to the related tx by block endpoint. |
 
 
 **Credit Cost:** 1 per call
 
 **Processing:** Realtime
 
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
+
 ---
 
-## Get all chain statuses
+## Chain Status API
 
 **Operation Identity:**
 - Operation ID: `getAllChainStatus`
@@ -64,32 +66,34 @@
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `updated_at` | string | The timestamp when the response was generated. Useful to show data staleness to users. |
-| `items` | array | List of response items. |
+| `updated_at` | `string` | The timestamp when the response was generated. Useful to show data staleness to users. |
+| `items` | `array` | List of response items. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `name` | string | The chain name eg: `eth-mainnet`. |
-| `chain_id` | string | The requested chain ID eg: `1`. |
-| `is_testnet` | boolean | True if the chain is a testnet. |
-| `logo_url` | string | A svg logo url for the chain. |
-| `black_logo_url` | string | A black png logo url for the chain. |
-| `white_logo_url` | string | A white png logo url for the chain. |
-| `is_appchain` | boolean | True if the chain is an AppChain. |
-| `synced_block_height` | integer | The height of the lastest block available. |
-| `synced_blocked_signed_at` | string | The signed timestamp of lastest block available. |
-| `has_data` | boolean | True if the chain has data and ready for querying. |
+| `name` | `string` | The chain name eg: `eth-mainnet`. |
+| `chain_id` | `string` | The requested chain ID eg: `1`. |
+| `is_testnet` | `boolean` | True if the chain is a testnet. |
+| `logo_url` | `string` | A png logo url for the chain. |
+| `black_logo_url` | `string` | A black png logo url for the chain. |
+| `white_logo_url` | `string` | A white png logo url for the chain. |
+| `is_appchain` | `boolean` | True if the chain is an AppChain. |
+| `chain_tip_height` | `integer` | The height of the lastest block available. |
+| `chain_tip_signed_at` | `string` | The signed timestamp of lastest block available. |
+| `has_data` | `boolean` | True if the chain has data and ready for querying. |
 
 
 **Credit Cost:** 1 per call
 
 **Processing:** Realtime
 
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
+
 ---
 
-## Get all chains
+## Supported Chains API
 
 **Operation Identity:**
 - Operation ID: `getAllChains`
@@ -104,34 +108,36 @@
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `updated_at` | string | The timestamp when the response was generated. Useful to show data staleness to users. |
-| `items` | array | List of response items. |
+| `updated_at` | `string` | The timestamp when the response was generated. Useful to show data staleness to users. |
+| `items` | `array` | List of response items. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `name` | string | The chain name eg: `eth-mainnet`. |
-| `chain_id` | string | The requested chain ID eg: `1`. |
-| `is_testnet` | boolean | True if the chain is a testnet. |
-| `db_schema_name` | string | Schema name to use for direct SQL. |
-| `label` | string | The chains label eg: `Ethereum Mainnet`. |
-| `category_label` | string | The category label eg: `Ethereum`. |
-| `logo_url` | string | A svg logo url for the chain. |
-| `black_logo_url` | string | A black png logo url for the chain. |
-| `white_logo_url` | string | A white png logo url for the chain. |
-| `color_theme` | object | The color theme for the chain. |
-| `is_appchain` | boolean | True if the chain is an AppChain. |
-| `appchain_of` | object | The ChainItem the appchain is a part of. |
+| `name` | `string` | The chain name eg: `eth-mainnet`. |
+| `chain_id` | `string` | The requested chain ID eg: `1`. |
+| `is_testnet` | `boolean` | True if the chain is a testnet. |
+| `db_schema_name` | `string` | Schema name to use for direct SQL. |
+| `label` | `string` | The chains label eg: `Ethereum Mainnet`. |
+| `category_label` | `string` | The category label eg: `Ethereum`. |
+| `logo_url` | `string` | A png logo url for the chain. |
+| `black_logo_url` | `string` | A black png logo url for the chain. |
+| `white_logo_url` | `string` | A white png logo url for the chain. |
+| `color_theme` | `object` | The color theme for the chain. |
+| `is_appchain` | `boolean` | True if the chain is an AppChain. |
+| `appchain_of` | `object` | The ChainItem the appchain is a part of. |
 
 
 **Credit Cost:** 0.01 per call
 
 **Processing:** Realtime
 
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
+
 ---
 
-## Get block heights
+## Block Heights API
 
 **Operation Identity:**
 - Operation ID: `getBlockHeights`
@@ -161,44 +167,46 @@
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `updated_at` | string | The timestamp when the response was generated. Useful to show data staleness to users. |
-| `chain_id` | integer | The requested chain ID eg: `1`. |
-| `chain_name` | string | The requested chain name eg: `eth-mainnet`. |
-| `items` | array | List of response items. |
-| `pagination` | object | Pagination metadata. |
+| `updated_at` | `string` | The timestamp when the response was generated. Useful to show data staleness to users. |
+| `chain_id` | `integer` | The requested chain ID eg: `1`. |
+| `chain_name` | `string` | The requested chain name eg: `eth-mainnet`. |
+| `items` | `array` | List of response items. |
+| `pagination` | `object` | Pagination metadata. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `block_hash` | string | The hash of the block. |
-| `signed_at` | string | The block signed timestamp in UTC. |
-| `height` | integer | The block height. |
-| `block_parent_hash` | string | The parent block hash. |
-| `extra_data` | string | Extra data written to the block. |
-| `miner_address` | string | The address of the miner. |
-| `mining_cost` | integer | The associated mining cost. |
-| `gas_used` | integer | The associated gas used. |
-| `gas_limit` | integer | The associated gas limit. |
-| `transactions_link` | string | The link to the related tx by block endpoint. |
+| `block_hash` | `string` | The hash of the block. |
+| `signed_at` | `string` | The block signed timestamp in UTC. |
+| `height` | `integer` | The block height. |
+| `block_parent_hash` | `string` | The parent block hash. |
+| `extra_data` | `string` | Extra data written to the block. |
+| `miner_address` | `string` | The address of the miner. |
+| `mining_cost` | `integer` | The associated mining cost. |
+| `gas_used` | `integer` | The associated gas used. |
+| `gas_limit` | `integer` | The associated gas limit. |
+| `transactions_link` | `string` | The link to the related tx by block endpoint. |
 
 ### Pagination Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `has_more` | boolean | True if there is another page. |
-| `page_number` | integer | The requested page number. |
-| `page_size` | integer | The requested number of items on the current page. |
-| `total_count` | integer | The total number of items across all pages for this request. |
+| `has_more` | `boolean` | True if there is another page. |
+| `page_number` | `integer` | The requested page number. |
+| `page_size` | `integer` | The requested number of items on the current page. |
+| `total_count` | `integer` | The total number of items across all pages for this request. |
 
 
 **Credit Cost:** 1 per call
 
 **Processing:** Realtime
 
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
+
 ---
 
-## Get gas prices
+## Gas Price API
 
 **Operation Identity:**
 - Operation ID: `getGasPrices`
@@ -226,31 +234,33 @@
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `chain_id` | integer | The requested chain ID eg: `1`. |
-| `chain_name` | string | The requested chain name eg: `eth-mainnet`. |
-| `quote_currency` | string | The requested quote currency eg: `USD`. |
-| `updated_at` | string | The timestamp when the response was generated. Useful to show data staleness to users. |
-| `event_type` | string | The requested event type. |
-| `gas_quote_rate` | number | The exchange rate for the requested quote currency. |
-| `base_fee` | string | b;The lowest gas fee for the latest block height. |
-| `items` | array | List of response items. |
+| `chain_id` | `integer` | The requested chain ID eg: `1`. |
+| `chain_name` | `string` | The requested chain name eg: `eth-mainnet`. |
+| `quote_currency` | `string` | The requested quote currency eg: `USD`. |
+| `updated_at` | `string` | The timestamp when the response was generated. Useful to show data staleness to users. |
+| `event_type` | `string` | The requested event type. |
+| `gas_quote_rate` | `number` | The exchange rate for the requested quote currency. |
+| `base_fee` | `string` | b;The lowest gas fee for the latest block height. |
+| `items` | `array` | List of response items. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `gas_price` | string | The average gas price, in WEI, for the time interval. |
-| `gas_spent` | string | The average gas spent for the time interval. |
-| `gas_quote` | number | The average gas spent in `quote-currency` denomination for the time interval. |
-| `other_fees` | object | Other fees, when applicable. For example: OP chain L1 fees. |
-| `total_gas_quote` | number | The sum of the L1 and L2 gas spent, in quote-currency, for the specified time interval. |
-| `pretty_total_gas_quote` | string | A prettier version of the total average gas spent, in quote-currency, for the specified time interval, for rendering purposes. |
-| `interval` | string | The specified time interval. |
+| `gas_price` | `string` | The average gas price, in WEI, for the time interval. |
+| `gas_spent` | `string` | The average gas spent for the time interval. |
+| `gas_quote` | `number` | The average gas spent in `quote-currency` denomination for the time interval. |
+| `other_fees` | `object` | Other fees, when applicable. For example: OP chain L1 fees. |
+| `total_gas_quote` | `number` | The sum of the L1 and L2 gas spent, in quote-currency, for the specified time interval. |
+| `pretty_total_gas_quote` | `string` | A prettier version of the total average gas spent, in quote-currency, for the specified time interval, for rendering purposes. |
+| `interval` | `string` | The specified time interval. |
 
 
 **Credit Cost:** 1 per call
 
 **Processing:** Batch
+
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
 
 > **Note:** Currently support these event types: `erc20` token transfers, `nativetokens` transfer, and `uniswapv3` swap events.
 
@@ -260,7 +270,7 @@
 
 ---
 
-## Get historical token prices
+## Historical Token Price API
 
 **Operation Identity:**
 - Operation ID: `getTokenPrices`
@@ -291,44 +301,38 @@
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `contract_decimals` | integer | Use contract decimals to format the token balance for display purposes - divide the balance by `10^{contract_decimals}`. |
-| `contract_name` | string | The string returned by the `name()` method. |
-| `contract_ticker_symbol` | string | The ticker symbol for this contract. This field is set by a developer and non-unique across a network. |
-| `contract_address` | string | Use the relevant `contract_address` to lookup prices, logos, token transfers, etc. |
-| `supports_erc` | array | A list of supported standard ERC interfaces, eg: `ERC20` and `ERC721`. |
-| `logo_url` | string | The contract logo URL. |
-| `update_at` | string |  |
-| `quote_currency` | string | The requested quote currency eg: `USD`. |
-| `logo_urls` | object | The contract logo URLs. |
-| `prices` | array | List of response items. |
-| `items` | array | List of response items. |
+| `contract_decimals` | `integer` | Use contract decimals to format the token balance for display purposes - divide the balance by `10^{contract_decimals}`. |
+| `contract_name` | `string` | The string returned by the `name()` method. |
+| `contract_ticker_symbol` | `string` | The ticker symbol for this contract. This field is set by a developer and non-unique across a network. |
+| `contract_address` | `string` | Use the relevant `contract_address` to lookup prices, logos, token transfers, etc. |
+| `supports_erc` | `array` | A list of supported standard ERC interfaces, eg: `ERC20` and `ERC721`. |
+| `update_at` | `string` |  |
+| `quote_currency` | `string` | The requested quote currency eg: `USD`. |
+| `logo_urls` | `object` | The contract logo URLs. |
+| `items` | `array` | List of response items. |
 
 ### Logo Url Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token_logo_url` | string | The token logo URL. |
-| `protocol_logo_url` | string | The protocol logo URL. |
-| `chain_logo_url` | string | The chain logo URL. |
-
-### Price Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `contract_metadata` | object |  |
-| `date` | string | The date of the price capture. |
-| `price` | number | The price in the requested `quote-currency`. |
-| `pretty_price` | string | A prettier version of the price for rendering purposes. |
+| `token_logo_url` | `string` | The token logo URL. |
+| `protocol_logo_url` | `string` | The protocol logo URL. |
+| `chain_logo_url` | `string` | The chain logo URL. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
+| `date` | `string` | The date of the price capture. |
+| `price` | `number` | The price in the requested `quote-currency`. |
+| `pretty_price` | `string` | A prettier version of the price for rendering purposes. |
 
 
 **Credit Cost:** 1 per call
 
 **Processing:** Batch
+
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
 
 > **Note:** Supports a comma separated list of token contract addresses.
 
@@ -336,7 +340,7 @@ If no date range is provided, the spot price (with a 5 minute refresh) is provid
 
 ---
 
-## Get log events by contract address
+## Contract Event Logs API
 
 **Operation Identity:**
 - Operation ID: `getLogEventsByAddress`
@@ -367,50 +371,51 @@ If no date range is provided, the spot price (with a 5 minute refresh) is provid
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `updated_at` | string | The timestamp when the response was generated. Useful to show data staleness to users. |
-| `chain_id` | integer | The requested chain ID eg: `1`. |
-| `chain_name` | string | The requested chain name eg: `eth-mainnet`. |
-| `items` | array | List of response items. |
-| `pagination` | object | Pagination metadata. |
+| `updated_at` | `string` | The timestamp when the response was generated. Useful to show data staleness to users. |
+| `chain_id` | `integer` | The requested chain ID eg: `1`. |
+| `chain_name` | `string` | The requested chain name eg: `eth-mainnet`. |
+| `items` | `array` | List of response items. |
+| `pagination` | `object` | Pagination metadata. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `block_signed_at` | string | The block signed timestamp in UTC. |
-| `block_height` | integer | The height of the block. |
-| `tx_offset` | integer | The offset is the position of the tx in the block. |
-| `log_offset` | integer | The offset is the position of the log entry within an event log. |
-| `tx_hash` | string | The requested transaction hash. |
-| `raw_log_topics` | array<string> | The log topics in raw data. |
-| `sender_contract_decimals` | integer | Use contract decimals to format the token balance for display purposes - divide the balance by `10^{contract_decimals}`. |
-| `sender_name` | string | The name of the sender. |
-| `sender_contract_ticker_symbol` | string |  |
-| `sender_address` | string | The address of the sender. |
-| `sender_address_label` | string | The label of the sender address. |
-| `sender_logo_url` | string | The contract logo URL. |
-| `supports_erc` | array<string> | A list of supported standard ERC interfaces, eg: `ERC20` and `ERC721`. |
-| `sender_factory_address` | string | The address of the deployed UniswapV2 like factory contract for this DEX. |
-| `raw_log_data` | string | The log events in raw. |
-| `decoded` | object | The decoded item. |
+| `block_signed_at` | `string` | The block signed timestamp in UTC. |
+| `block_height` | `integer` | The height of the block. |
+| `tx_offset` | `integer` | The offset is the position of the tx in the block. |
+| `log_offset` | `integer` | The offset is the position of the log entry within an event log. |
+| `tx_hash` | `string` | The requested transaction hash. |
+| `raw_log_topics` | `array<string>` | The log topics in raw data. |
+| `sender_contract_decimals` | `integer` | Use contract decimals to format the token balance for display purposes - divide the balance by `10^{contract_decimals}`. |
+| `sender_name` | `string` | The name of the sender. |
+| `sender_contract_ticker_symbol` | `string` |  |
+| `sender_address` | `string` | The address of the sender. |
+| `sender_logo_url` | `string` | The contract logo URL. |
+| `supports_erc` | `array<string>` | A list of supported standard ERC interfaces, eg: `ERC20` and `ERC721`. |
+| `sender_factory_address` | `string` | The address of the deployed UniswapV2 like factory contract for this DEX. |
+| `raw_log_data` | `string` | The log events in raw. |
+| `decoded` | `object` | The decoded item. |
 
 ### Pagination Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `has_more` | boolean | True if there is another page. |
-| `page_number` | integer | The requested page number. |
-| `page_size` | integer | The requested number of items on the current page. |
-| `total_count` | integer | The total number of items across all pages for this request. |
+| `has_more` | `boolean` | True if there is another page. |
+| `page_number` | `integer` | The requested page number. |
+| `page_size` | `integer` | The requested number of items on the current page. |
+| `total_count` | `integer` | The total number of items across all pages for this request. |
 
 
 **Credit Cost:** 0.01 per item
 
 **Processing:** Realtime
 
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
+
 ---
 
-## Get log events by topic hash(es)
+## Event Logs by Topic Hash API
 
 **Operation Identity:**
 - Operation ID: `getLogEventsByTopicHash`
@@ -442,52 +447,53 @@ If no date range is provided, the spot price (with a 5 minute refresh) is provid
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `updated_at` | string | The timestamp when the response was generated. Useful to show data staleness to users. |
-| `chain_id` | integer | The requested chain ID eg: `1`. |
-| `chain_name` | string | The requested chain name eg: `eth-mainnet`. |
-| `chain_tip_height` | integer | The latest block height of the blockchain at the time this response was provided. |
-| `chain_tip_signed_at` | string | The timestamp of the latest signed block at the time this response was provided. |
-| `items` | array | List of response items. |
-| `pagination` | object | Pagination metadata. |
+| `updated_at` | `string` | The timestamp when the response was generated. Useful to show data staleness to users. |
+| `chain_id` | `integer` | The requested chain ID eg: `1`. |
+| `chain_name` | `string` | The requested chain name eg: `eth-mainnet`. |
+| `chain_tip_height` | `integer` | The latest block height of the blockchain at the time this response was provided. |
+| `chain_tip_signed_at` | `string` | The timestamp of the latest signed block at the time this response was provided. |
+| `items` | `array` | List of response items. |
+| `pagination` | `object` | Pagination metadata. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `block_signed_at` | string | The block signed timestamp in UTC. |
-| `block_height` | integer | The height of the block. |
-| `tx_offset` | integer | The offset is the position of the tx in the block. |
-| `log_offset` | integer | The offset is the position of the log entry within an event log. |
-| `tx_hash` | string | The requested transaction hash. |
-| `raw_log_topics` | array<string> | The log topics in raw data. |
-| `sender_contract_decimals` | integer | Use contract decimals to format the token balance for display purposes - divide the balance by `10^{contract_decimals}`. |
-| `sender_name` | string | The name of the sender. |
-| `sender_contract_ticker_symbol` | string |  |
-| `sender_address` | string | The address of the sender. |
-| `sender_address_label` | string | The label of the sender address. |
-| `sender_logo_url` | string | The contract logo URL. |
-| `supports_erc` | array<string> | A list of supported standard ERC interfaces, eg: `ERC20` and `ERC721`. |
-| `sender_factory_address` | string | The address of the deployed UniswapV2 like factory contract for this DEX. |
-| `raw_log_data` | string | The log events in raw. |
-| `decoded` | object | The decoded item. |
+| `block_signed_at` | `string` | The block signed timestamp in UTC. |
+| `block_height` | `integer` | The height of the block. |
+| `tx_offset` | `integer` | The offset is the position of the tx in the block. |
+| `log_offset` | `integer` | The offset is the position of the log entry within an event log. |
+| `tx_hash` | `string` | The requested transaction hash. |
+| `raw_log_topics` | `array<string>` | The log topics in raw data. |
+| `sender_contract_decimals` | `integer` | Use contract decimals to format the token balance for display purposes - divide the balance by `10^{contract_decimals}`. |
+| `sender_name` | `string` | The name of the sender. |
+| `sender_contract_ticker_symbol` | `string` |  |
+| `sender_address` | `string` | The address of the sender. |
+| `sender_logo_url` | `string` | The contract logo URL. |
+| `supports_erc` | `array<string>` | A list of supported standard ERC interfaces, eg: `ERC20` and `ERC721`. |
+| `sender_factory_address` | `string` | The address of the deployed UniswapV2 like factory contract for this DEX. |
+| `raw_log_data` | `string` | The log events in raw. |
+| `decoded` | `object` | The decoded item. |
 
 ### Pagination Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `has_more` | boolean | True if there is another page. |
-| `page_number` | integer | The requested page number. |
-| `page_size` | integer | The requested number of items on the current page. |
-| `total_count` | integer | The total number of items across all pages for this request. |
+| `has_more` | `boolean` | True if there is another page. |
+| `page_number` | `integer` | The requested page number. |
+| `page_size` | `integer` | The requested number of items on the current page. |
+| `total_count` | `integer` | The total number of items across all pages for this request. |
 
 
 **Credit Cost:** 0.01 per item
 
 **Processing:** Realtime
 
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
+
 ---
 
-## Get logs
+## Event Logs API
 
 **Operation Identity:**
 - Operation ID: `getLogs`
@@ -519,39 +525,40 @@ If no date range is provided, the spot price (with a 5 minute refresh) is provid
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `updated_at` | string | The timestamp when the response was generated. Useful to show data staleness to users. |
-| `chain_id` | integer | The requested chain ID eg: `1`. |
-| `chain_name` | string | The requested chain name eg: `eth-mainnet`. |
-| `chain_tip_height` | integer | The latest block height of the blockchain at the time this response was provided. |
-| `chain_tip_signed_at` | string | The timestamp of the latest signed block at the time this response was provided. |
-| `items` | array | List of response items. |
+| `updated_at` | `string` | The timestamp when the response was generated. Useful to show data staleness to users. |
+| `chain_id` | `integer` | The requested chain ID eg: `1`. |
+| `chain_name` | `string` | The requested chain name eg: `eth-mainnet`. |
+| `chain_tip_height` | `integer` | The latest block height of the blockchain at the time this response was provided. |
+| `chain_tip_signed_at` | `string` | The timestamp of the latest signed block at the time this response was provided. |
+| `items` | `array` | List of response items. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `block_signed_at` | string | The block signed timestamp in UTC. |
-| `block_height` | integer | The height of the block. |
-| `block_hash` | string | The hash of the block. |
-| `tx_offset` | integer | The offset is the position of the tx in the block. |
-| `log_offset` | integer | The offset is the position of the log entry within an event log. |
-| `tx_hash` | string | The requested transaction hash. |
-| `raw_log_topics` | array<string> | The log topics in raw data. |
-| `sender_contract_decimals` | integer | Use contract decimals to format the token balance for display purposes - divide the balance by `10^{contract_decimals}`. |
-| `sender_name` | string | The name of the sender. |
-| `sender_contract_ticker_symbol` | string | The ticker symbol for the sender. This field is set by a developer and non-unique across a network. |
-| `sender_address` | string | The address of the sender. |
-| `sender_address_label` | string | The label of the sender address. |
-| `supports_erc` | array<string> | A list of supported standard ERC interfaces, eg: `ERC20` and `ERC721`. |
-| `sender_logo_url` | string | The contract logo URL. |
-| `sender_factory_address` | string | The address of the deployed UniswapV2 like factory contract for this DEX. |
-| `raw_log_data` | string | The log events in raw. |
-| `decoded` | object | The decoded item. |
+| `block_signed_at` | `string` | The block signed timestamp in UTC. |
+| `block_height` | `integer` | The height of the block. |
+| `block_hash` | `string` | The hash of the block. |
+| `tx_offset` | `integer` | The offset is the position of the tx in the block. |
+| `log_offset` | `integer` | The offset is the position of the log entry within an event log. |
+| `tx_hash` | `string` | The requested transaction hash. |
+| `raw_log_topics` | `array<string>` | The log topics in raw data. |
+| `sender_contract_decimals` | `integer` | Use contract decimals to format the token balance for display purposes - divide the balance by `10^{contract_decimals}`. |
+| `sender_name` | `string` | The name of the sender. |
+| `sender_contract_ticker_symbol` | `string` | The ticker symbol for the sender. This field is set by a developer and non-unique across a network. |
+| `sender_address` | `string` | The address of the sender. |
+| `supports_erc` | `array<string>` | A list of supported standard ERC interfaces, eg: `ERC20` and `ERC721`. |
+| `sender_logo_url` | `string` | The contract logo URL. |
+| `sender_factory_address` | `string` | The address of the deployed UniswapV2 like factory contract for this DEX. |
+| `raw_log_data` | `string` | The log events in raw. |
+| `decoded` | `object` | The decoded item. |
 
 
 **Credit Cost:** 0.01 per item
 
 **Processing:** Realtime
+
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
 
 > **Note:** Limits:
 
@@ -561,7 +568,7 @@ If no date range is provided, the spot price (with a 5 minute refresh) is provid
 
 ---
 
-## Get pool spot prices
+## DEX Pool Spot Price API
 
 **Operation Identity:**
 - Operation ID: `getPoolSpotPrices`
@@ -589,34 +596,36 @@ If no date range is provided, the spot price (with a 5 minute refresh) is provid
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `updated_at` | string | The timestamp when the response was generated. |
-| `pool_address` | string | The deployed pool contract address. |
-| `token_0_address` | string | The deployed contract address of `token_0` in the token pair making up the pool. |
-| `token_0_name` | string | The deployed contract name of `token_0` in the token pair making up the pool. |
-| `token_0_ticker` | string | The deployed contract symbol of `token_0` in the token pair making up the pool. |
-| `token_0_price` | string | Price of `token_0` in units of `token_1`. |
-| `token_0_price_24h` | string | Price of `token_0` in units of `token_1` as of 24 hours ago. |
-| `token_0_price_quote` | string | Price of `token_0` in the selected quote currency (defaults to USD). |
-| `token_0_price_24h_quote` | string | Price of `token_0` in the selected quote currency (defaults to USD) as of 24 hours ago. |
-| `token_1_address` | string | The deployed contract address of `token_1` in the token pair making up the pool. |
-| `token_1_name` | string | The deployed contract name of `token_1` in the token pair making up the pool. |
-| `token_1_ticker` | string | The deployed contract symbol of `token_1` in the token pair making up the pool. |
-| `token_1_price` | string | Price of `token_1` in units of `token_0`. |
-| `token_1_price_24h` | string | Price of `token_1` in units of `token_0` as of 24 hours ago. |
-| `token_1_price_quote` | string | Price of `token_1` in the selected quote currency (defaults to USD). |
-| `token_1_price_24h_quote` | string | Price of `token_1` in the selected quote currency (defaults to USD) as of 24 hours ago. |
-| `quote_currency` | string | The currency to convert. Supports `USD`, `CAD`, `EUR`, `SGD`, `INR`, `JPY`, `VND`, `CNY`, `KRW`, `RUB`, `TRY`, `NGN`, `ARS`, `AUD`, `CHF`, `GBP`, `BTC` and `ETH`. |
+| `updated_at` | `string` | The timestamp when the response was generated. |
+| `pool_address` | `string` | The deployed pool contract address. |
+| `token_0_address` | `string` | The deployed contract address of `token_0` in the token pair making up the pool. |
+| `token_0_name` | `string` | The deployed contract name of `token_0` in the token pair making up the pool. |
+| `token_0_ticker` | `string` | The deployed contract symbol of `token_0` in the token pair making up the pool. |
+| `token_0_price` | `string` | Price of `token_0` in units of `token_1`. |
+| `token_0_price_24h` | `string` | Price of `token_0` in units of `token_1` as of 24 hours ago. |
+| `token_0_price_quote` | `string` | Price of `token_0` in the selected quote currency (defaults to USD). |
+| `token_0_price_24h_quote` | `string` | Price of `token_0` in the selected quote currency (defaults to USD) as of 24 hours ago. |
+| `token_1_address` | `string` | The deployed contract address of `token_1` in the token pair making up the pool. |
+| `token_1_name` | `string` | The deployed contract name of `token_1` in the token pair making up the pool. |
+| `token_1_ticker` | `string` | The deployed contract symbol of `token_1` in the token pair making up the pool. |
+| `token_1_price` | `string` | Price of `token_1` in units of `token_0`. |
+| `token_1_price_24h` | `string` | Price of `token_1` in units of `token_0` as of 24 hours ago. |
+| `token_1_price_quote` | `string` | Price of `token_1` in the selected quote currency (defaults to USD). |
+| `token_1_price_24h_quote` | `string` | Price of `token_1` in the selected quote currency (defaults to USD) as of 24 hours ago. |
+| `quote_currency` | `string` | The currency to convert. Supports `USD`, `CAD`, `EUR`, `SGD`, `INR`, `JPY`, `VND`, `CNY`, `KRW`, `RUB`, `TRY`, `NGN`, `ARS`, `AUD`, `CHF`, `GBP`, `BTC` and `ETH`. |
 
 
 **Credit Cost:** 1 per call
 
 **Processing:** Batch
 
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
+
 > **Note:** Supports pools on Uniswap V2, V3 and their forks on all [Foundational Chains](https://goldrush.dev/chains/).
 
 ---
 
-## Get resolved address for registered address
+## ENS Name Resolution API
 
 **Operation Identity:**
 - Operation ID: `getResolvedAddress`
@@ -638,22 +647,24 @@ If no date range is provided, the spot price (with a 5 minute refresh) is provid
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `updated_at` | string | The timestamp when the response was generated. Useful to show data staleness to users. |
-| `chain_id` | integer | The requested chain ID eg: `1`. |
-| `chain_name` | string | The requested chain name eg: `eth-mainnet`. |
-| `items` | array | List of response items. |
+| `updated_at` | `string` | The timestamp when the response was generated. Useful to show data staleness to users. |
+| `chain_id` | `integer` | The requested chain ID eg: `1`. |
+| `chain_name` | `string` | The requested chain name eg: `eth-mainnet`. |
+| `items` | `array` | List of response items. |
 
 ### Item Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `address` | string | The requested address. |
-| `name` | string |  |
+| `address` | `string` | The requested address. |
+| `name` | `string` |  |
 
 
 **Credit Cost:** 1 per call
 
 **Processing:** Realtime
+
+> **Tip:** Estimate your monthly cost for this API using the **Pricing Calculator**.
 
 #### Related guides
 
@@ -667,7 +678,7 @@ The GoldRush Enhanced Spam Lists are a public good designed to restore trust and
 
 The Enhanced Spam Lists can be accessed as an [npm package](https://www.npmjs.com/package/@covalenthq/goldrush-enhanced-spam-lists).
 
-This package requires Node.js v18 or above.
+> **Note:** This package requires Node.js v18 or above.
 
 ### Step 1. Install the Package
 
@@ -688,7 +699,9 @@ pnpm add @covalenthq/goldrush-enhanced-spam-lists
 ### Step 2. Use Cases
 
     
-        ```javascript
+**Verify if an ERC20 token is spam on a given network**
+
+```javascript
         import {
             Networks,
             isERC20Spam,
@@ -698,9 +711,11 @@ pnpm add @covalenthq/goldrush-enhanced-spam-lists
         const isSpam = await isERC20Spam("0xTokenAddress", Networks.ETHEREUM_MAINNET);
         console.log(isSpam);
         ```
+
     
-    
-        ```javascript
+**For a potential spam check for an ERC20 token, Confidence.MAYBE can be used**
+
+```javascript
         import {
             Confidence,
             Networks,
@@ -714,9 +729,11 @@ pnpm add @covalenthq/goldrush-enhanced-spam-lists
         );
         console.log(isPotentialSpam);
         ```
+
     
-    
-        ```javascript
+**Verify if an NFT token is spam on a given network**
+
+```javascript
         import {
                 Networks,
                 isNFTSpam,
@@ -725,9 +742,11 @@ pnpm add @covalenthq/goldrush-enhanced-spam-lists
         const isNftSpam = await isNFTSpam("0xNftAddress", Networks.BSC_MAINNET);
         console.log(isNftSpam);
         ```
+
     
-    
-        ```javascript
+**Control caching behavior**
+
+```javascript
         import {
             Networks,
             Confidence,
@@ -754,9 +773,11 @@ pnpm add @covalenthq/goldrush-enhanced-spam-lists
         // Clear memory and disk cache if needed
         clearCache();
         ```
+
     
-    
-        ```javascript
+**For more control, you can get the full lists:**
+
+```javascript
         import {
             getERC20List,
             getNFTList,
@@ -770,9 +791,11 @@ pnpm add @covalenthq/goldrush-enhanced-spam-lists
         // Get NFT spam list with caching disabled
         const bscSpamNfts = await getNFTList(Networks.BSC_MAINNET, false);
         ```
+
     
-    
-        ```javascript
+**Get the specific spam score for a given contract**
+
+```javascript
         import {
             getERC20List,
             getSpamScore,

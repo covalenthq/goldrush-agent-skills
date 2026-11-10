@@ -6,7 +6,7 @@
 |------|-------|
 | **Base URL** | `https://x402.goldrush.dev/v1` |
 | **Protocol** | x402 (HTTP 402 Payment Required) |
-| **Authentication** | None — wallet-based micropayments replace API keys |
+| **Authentication** | None -wallet-based micropayments replace API keys |
 | **Payment Network** | Base Sepolia testnet (Base mainnet coming soon) |
 | **Payment Method** | Stablecoins on Base |
 | **Rate Limit** | 100 requests/minute per wallet |
@@ -16,7 +16,7 @@
 ## Pricing Model
 
 - **Fixed-Price:** One price per call (e.g., token balances, NFT holdings)
-- **Tiered Pricing:** For variable-length data — Small (1-50), Medium (51-200), Large (201-500), XL (501+)
+- **Tiered Pricing:** For variable-length data - Small (1-50), Medium (51-200), Large (201-500), XL (501+)
 - **Response Caching:** Cached responses cost less (TTLs: 30s for balances, 5m for pricing)
 
 ## Response Headers
@@ -125,7 +125,7 @@ Every endpoint returns its credit rate, pricing model, supported chains, and x40
 
 You need a wallet with testnet USDC on Base Sepolia. You'll use the wallet's private key to sign x402 payments.
 
-Never commit your private key to source control. Use environment variables or a secrets manager.
+> **Warning:** Never commit your private key to source control. Use environment variables or a secrets manager.
 
 ```bash
 export WALLET_PRIVATE_KEY="your-base-sepolia-private-key"
@@ -134,32 +134,37 @@ export WALLET_PRIVATE_KEY="your-base-sepolia-private-key"
 ## 3. Install the x402 client
 
 ```bash npm
-npm install @x402/core @x402/evm
+npm install @x402/core @x402/evm @x402/fetch
 ```
 
 ```bash yarn
-yarn add @x402/core @x402/evm
+yarn add @x402/core @x402/evm @x402/fetch
 ```
 
 ## 4. Make your first request
 
 ```typescript
-import { HTTPClient } from "@x402/core";
+import { x402Client } from "@x402/core/client";
 import { ExactEvmScheme } from "@x402/evm";
+import { wrapFetchWithPayment } from "@x402/fetch";
+import { privateKeyToAccount } from "viem/accounts";
 
-const client = new HTTPClient({
-  scheme: new ExactEvmScheme({
-    network: "eip155:84532", // Base Sepolia (testnet)
-    privateKey: process.env.WALLET_PRIVATE_KEY,
-  }),
-});
-
-// Get token balances - payment is handled automatically
-const balances = await client.get(
-  "https://x402.goldrush.dev/v1/eth-mainnet/address/demo.eth/balances_v2/"
+const client = new x402Client().register("eip155:84532",
+  new ExactEvmScheme(privateKeyToAccount(process.env.WALLET_PRIVATE_KEY))
 );
 
-console.log(balances);
+const paidFetch = wrapFetchWithPayment(fetch, client);
+
+const response = await paidFetch(
+  "https://x402.goldrush.dev/v1/eth-mainnet/address/aave.eth/balances_v2/"
+);
+
+const balances = await response.json();
+
+console.log(JSON.stringify({
+  headers: Object.fromEntries(response.headers.entries()),
+  body: balances,
+}, null, 2));
 ```
 
 The x402 client handles the full payment flow: if a request gets a `402`, it reads the payment instructions, signs a transaction, and retries. From your code's perspective, it's just a GET request.
@@ -170,8 +175,8 @@ Endpoints with dynamic pricing (transactions, event logs) require a `tier` param
 
 ```typescript
 // Get transactions with tier selection
-const txns = await client.get(
-  "https://x402.goldrush.dev/v1/eth-mainnet/address/demo.eth/transactions_v3/?tier=medium"
+const response = await paidFetch(
+  "https://x402.goldrush.dev/v1/eth-mainnet/address/aave.eth/transactions_v3/?tier=medium"
 );
 ```
 

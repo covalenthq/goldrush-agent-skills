@@ -43,7 +43,7 @@ Chain names use the format: `{network}-{environment}`. These are **case-sensitiv
 | ApeChain | `apechain-mainnet` | 33139 | frontier |
 | Arbitrum | `arbitrum-mainnet` | 42161 | frontier |
 | Arbitrum Nova | `arbitrum-nova-mainnet` | 42170 | frontier |
-| Arc Testnet | `arc-testnet` | 5042002 | frontier |
+| Arc | `arc-mainnet` | 5042 | frontier |
 | Avalanche C-Chain | `avalanche-mainnet` | 43114 | frontier |
 | Axie/Ronin | `axie-mainnet` | 2020 | frontier |
 | Berachain | `berachain-mainnet` | 80094 | frontier |
@@ -69,15 +69,12 @@ Chain names use the format: `{network}-{environment}`. These are **case-sensitiv
 | Blast | `blast-mainnet` | 81457 | community |
 | Canto | `canto-mainnet` | 7700 | community |
 | Celo | `celo-mainnet` | 42220 | community |
-| Covalent | `covalent-internal-network-v1` | 1131378225 | community |
 | Cronos zkEVM | `cronos-zkevm-mainnet` | 388 | community |
 | Fantom | `fantom-mainnet` | 250 | community |
-| Manta Pacific Testnet | `manta-sepolia-testnet` | 3441006 | community |
 | Moonbeam | `moonbeam-mainnet` | 1284 | community |
 | Moonriver | `moonbeam-moonriver` | 1285 | community |
 | Oasis | `emerald-paratime-mainnet` | 42262 | community |
 | opBNB | `bnb-opbnb-mainnet` | 204 | community |
-| Redstone | `redstone-mainnet` | 690 | community |
 | ZetaChain | `zetachain-mainnet` | 7000 | community |
 | Cronos | `cronos-mainnet` | 25 | archived |
 | Harmony | `harmony-mainnet` | 1666600000 | archived |
@@ -245,7 +242,7 @@ All error responses follow this schema:
 
 | HTTP Status | error_code | Meaning | Solution |
 |------------|-----------|---------|----------|
-| 401 | 401 | Invalid or missing API key | Check Authorization header format: `Bearer YOUR_API_KEY` |
+| 401 | 401 | Invalid or missing API key | Check Authorization header format: `Bearer <GOLDRUSH_API_KEY>` |
 | 400 | 400 | Invalid request parameters | Verify chain name, address format, or other parameters |
 | 404 | 404 | Resource not found | Check if chain name is valid or address has activity |
 | 429 | 429 | Rate limit exceeded | Reduce request frequency or upgrade plan |
@@ -374,10 +371,10 @@ while (true) {
 
 ```bash
 # WRONG
-curl -H "Authorization: YOUR_API_KEY"
+curl -H "Authorization: <GOLDRUSH_API_KEY>"
 
 # CORRECT
-curl -H "Authorization: Bearer YOUR_API_KEY"
+curl -H "Authorization: Bearer <GOLDRUSH_API_KEY>"
 ```
 
 ### ❌ Using HTTP Instead of HTTPS
@@ -497,7 +494,7 @@ You have access to the GoldRush API for blockchain data. Key points:
 
 1. Chain names use format like "eth-mainnet", "matic-mainnet", "base-mainnet" - never use common names like "ethereum" or "polygon"
 2. Balance fields are strings representing large numbers. Divide by 10^contract_decimals to get human-readable values
-3. All requests require "Authorization: Bearer YOUR_API_KEY" header
+3. All requests require "Authorization: Bearer <GOLDRUSH_API_KEY>" header
 4. Pagination returns 100 items per page. If result has 100 items, more pages likely exist
 5. Base URL: https://api.covalenthq.com/v1
 6. Always check resp.error before accessing resp.data
@@ -516,67 +513,158 @@ You have access to the GoldRush API for blockchain data. Key points:
 
 # Error Handling & Troubleshooting
 
-Both the GoldRush Foundational API (REST) and the Streaming API (GraphQL/WebSocket) return structured errors when something goes wrong. This page is the single reference for understanding error codes, handling rate limits, implementing retries, and debugging common issues.
+The GoldRush Foundational API (REST) returns structured errors when something goes wrong. This page is the single reference for understanding error codes, handling rate limits, implementing retries, and debugging common issues.
 
-## Foundational API (REST) Errors
+> **Note:** **Failed requests are free.** No API credits are deducted for any response outside the `2xx` range, whatever the cause. A `429`, a `501`, a `556` and a `500` all cost you nothing, so a retry is never a billing risk.
 
-The Foundational API returns standard HTTP status codes along with a JSON error body.
+Retries do still count against your **rate limit**, which is why the guidance below is about backing off correctly rather than about cost.
 
-| Code | Name | Common Cause |
-| :--- | :--- | :--- |
-| `400` | Bad Request | Malformed parameters, invalid address format |
-| `401` | Unauthorized | Missing or incorrect API key |
-| `402` | Payment Required | Credits exhausted — enable Flex Credits or upgrade tier |
-| `403` | Forbidden | API key is valid but not authorized for the resource |
-| `404` | Not Found | Unsupported chain, invalid endpoint |
-| `429` | Too Many Requests | Rate limit exceeded |
-| `500` | Internal Server Error | Server-side failure |
-| `503` | Service Unavailable | Maintenance or outage |
+## Standard and GoldRush-specific codes
 
-**Example error responses:**
+Not every code this API returns is a registered HTTP status code. It is worth knowing which is which, because off-the-shelf HTTP clients, proxies and monitoring tools only understand the registered ones and will usually flatten the rest into a generic "5xx".
 
-```json 401 Unauthorized
-{
-  "error": true,
-  "error_message": "No valid API key was provided.",
-  "error_code": "401"
-}
-```
+  
+**Standard HTTP codes:** `400` `401` `402` `403` `404` `406` `410` `416` `429` `500` `501` `503` `504` `507`
 
-```json 429 Rate Limited
-{
-  "error": true,
-  "error_message": "You are being rate-limited. Please reduce request frequency.",
-  "error_code": "429"
-}
-```
+    Registered status codes. Several carry a GoldRush-specific meaning, noted in the table below.
 
-## Streaming API (GraphQL/WebSocket) Errors
+  
+**GoldRush-specific codes:** `452` `551` `552` `554` `556` `557` `558` `561` `562` `563` `565` `567` `570`
 
-Authentication errors in the Streaming API are returned as GraphQL errors with specific extension codes:
+    **Not registered HTTP status codes.** Specific to the GoldRush API. Match on the exact number, not on the `5xx` class.
 
-| Code | Description |
-| :--- | :--- |
-| `MISSING_TOKEN` | No API key was provided in the `connection_init` payload. |
-| `INVALID_TOKEN` | The provided API key is malformed or invalid. |
-| `AUTH_SYSTEM_ERROR` | An internal server error occurred during authentication. |
+## The error response body
 
-**Example error response:**
+Every error the API itself generates uses the same envelope as a successful response, with `data` set to `null`:
 
 ```json
 {
-  "errors": [
-    {
-      "message": "Authentication required. Please provide a valid API key in the connection_init payload under 'GOLDRUSH_API_KEY' or 'Authorization' key.",
-      "extensions": {
-        "code": "MISSING_TOKEN"
-      }
-    }
-  ]
+  "data": null,
+  "error": true,
+  "error_message": "This chain does not currently support flag: with-state.",
+  "error_code": 501
 }
 ```
 
-  Auth errors only surface when a subscription starts, **not** on WebSocket connect. The server always sends a `connection_ack` response regardless of whether the API key is valid. You will only discover an invalid key when you attempt to subscribe.
+Three things to note:
+
+- `error_code` is a **JSON number**, not a string. Compare it with `501`, not `"501"`.
+- `error_code` always equals the HTTP status code, so you can branch on either one.
+- `error_message` carries the specific reason. Two requests can share a status code and mean entirely different things, so log the message as well as the code.
+
+The one exception is a bare `500`, which is returned with an empty body. Treat a response that has a `5xx` status and no parseable JSON as a `500`.
+
+> **Warning:** **A request with no `Authorization` header at all is rejected by the edge proxy, not by the API**, and returns an HTML body rather than JSON:
+
+```html
+401 Authorization Required ...
+```
+
+A missing or malformed key sent *with* the request returns the normal JSON `401`. If your client parses every response body as JSON, guard this one case, or check the `Content-Type` header before parsing.
+
+## Standard HTTP status codes
+
+These are all registered HTTP status codes. Where our meaning is narrower or more specific than the generic one, it is spelled out here.
+
+| Code | Name | What it means at GoldRush |
+| :--- | :--- | :--- |
+| `400` | Bad Request | Malformed parameters, invalid address format |
+| `401` | Unauthorized | Missing or incorrect API key |
+| `402` | Payment Required | Three distinct causes, told apart by `error_message`: credit limit exceeded, a paywalled feature on your tier, or a paused subscription on a production key |
+| `403` | Forbidden | API key is valid but not authorized for the resource |
+| `404` | Not Found | The endpoint path does not exist, or the specific record (transaction hash, block) was not found. Also returned when a requested block height has not been reached yet on that chain |
+| `406` | Not Acceptable | The request would predictably time out with these parameters, so it was not attempted. Reduce the date range or page size and retry |
+| `410` | Gone | The endpoint or the chain has been sunsetted. Stop calling it and remove any scheduled jobs that do |
+| `416` | Range Not Satisfiable | A query transform supplied with the request failed to parse |
+| `429` | Too Many Requests | Rate limit exceeded |
+| `500` | Internal Server Error | An unclassified server-side failure. Unlike every other code on this page, a `500` has **no JSON body** |
+| `501` | Not Implemented | The chain or endpoint does not support what you asked for. This is the most commonly misread code we return, so it has its own section below |
+| `503` | Service Unavailable | The chain is under maintenance, or a backend queue is full |
+| `504` | Gateway Timeout | A database query exceeded its statement timeout. Narrow the query and retry |
+| `507` | Insufficient Storage | The response was too large to buffer. Reduce `page-size` and retry |
+
+### 501 is a capability answer, not an outage
+
+A `501` means your request was well-formed and your key was fine, but the chain or endpoint cannot serve that particular thing. It is a stable answer rather than a transient one, so retrying it unchanged will not succeed until that support actually ships. It is returned in three situations:
+
+- **An unsupported chain.** Note that an unrecognized chain name returns `501`, not `404`:
+
+  ```json
+  { "data": null, "error": true, "error_message": "Chain nosuchchain-mainnet not supported.", "error_code": 501 }
+  ```
+
+- **A feature flag the chain does not support.** Flags such as `with-state` and `with-input-data` are only available on chains with the underlying data. The flag is valid, the chain just cannot serve it:
+
+  ```json
+  { "data": null, "error": true, "error_message": "This chain does not currently support flag: with-state.", "error_code": 501 }
+  ```
+
+  Rather than discovering this by trial, read the capability flags on **`/v1/chains/`**, such as `is_internal_tx_supported` and `is_input_data_supported`, and skip the call when the flag is false.
+
+- **An endpoint restricted to certain chains**, for example an EVM-only endpoint called on a non-EVM chain.
+
+> **Note:** The gate runs before the identifier is looked up, so a transaction hash that does not exist returns `404` on a chain that supports the flag and `501` on a chain that does not. That makes a throwaway hash a cheap way to test chain support.
+
+## GoldRush-specific status codes
+
+> **Warning:** The codes in this section are **not registered HTTP status codes**. They are specific to the GoldRush API.
+
+They exist so that different backend conditions stay distinguishable instead of collapsing into one generic `500`, which is what makes a useful retry policy possible at all. The tradeoff is that generic HTTP tooling does not know them: most clients, proxies and dashboards will report them only as "a 5xx". **Match on the exact number**, and if you alert on error classes, give at least `556` and `565` their own treatment.
+
+All of these carry the normal JSON error body described above.
+
+| Code | `error_message` | What happened | What to do |
+| :--- | :--- | :--- | :--- |
+| `452` | Please un-stealth your User-Agent | Your client sent a browser `User-Agent` but is not a browser | **Do not retry.** Set an honest `User-Agent` that identifies your application, then retry once |
+| `551` | Worker thread failed to respond in time | A worker did not finish within its deadline | **Retry with exponential backoff.** If it repeats on the same parameters, the request is probably too broad: narrow the date range or page size |
+| `552` | Connection to web3 provider failed | We could not reach the chain's node for a live call | **Retry with exponential backoff**, up to 3 to 5 attempts |
+| `554` | Timed out while waiting to acquire a database connection | All pooled database connections were busy | **Retry with exponential backoff.** Transient and usually clears within seconds |
+| `556` | Too many concurrent database requests | Deliberate load shedding. The query was refused on purpose to protect a saturated backend | **Retry with exponential backoff, and lower your concurrency.** Do not retry tightly, see the note below |
+| `557` | Database replica cancelled query to retain sync with primary | A read replica cancelled the query to stay in sync | **Retry once, immediately.** This one is usually gone on the next attempt |
+| `558` | Database unexpectedly closed connection | The connection dropped mid-query | **Retry with exponential backoff**, up to 3 attempts |
+| `561` | Could not acquire NFT metadata scraper from pool | The NFT metadata scraping pool was exhausted | **Retry with exponential backoff.** Consider spacing out bulk NFT metadata jobs |
+| `562` | Failed to connect to upstream third-party service | A third-party data provider we depend on was unreachable | **Retry with exponential backoff.** Recovery depends on a third party, so allow a longer ceiling, 30 to 60 seconds |
+| `563` | Connection to upstream third-party service timed out | A third-party data provider did not answer in time | **Retry with exponential backoff**, same longer ceiling as `562` |
+| `565` | Unable to find referenced `` in database; DB has fallen behind web3 source | The record exists on chain but our indexed copy has not caught up. Most often a transaction requested within seconds of being mined | **Wait at least 10 seconds, then retry once.** See the note below, do not retry immediately |
+| `567` | Chain dataset is currently unavailable | The dataset for that chain is temporarily not readable | **Retry after 30 seconds or more.** If it persists past a few minutes, treat that chain as down and fail over |
+| `570` | Contract execution error during web3 call | The contract call reverted on chain | **Do not retry.** This is a correct answer about the contract, not a failure on our side. Check your call arguments |
+
+> **Tip:** **`556` is the one to watch.** It means the request was refused on purpose while the backend was under load, not that anything is broken. A burst of `556` is the correct signal to back off; clients that retry it aggressively make the condition worse and last longer.
+
+> **Note:** **`565` is short-lived by design.** The response is cached for only 10 seconds, because the usual cause is that indexing is a few seconds behind the chain tip. Waiting 10 to 15 seconds and retrying once resolves most occurrences. If a `565` for the same record persists for minutes, raise it on the [support page](https://goldrush.dev/platform/support/).
+
+## What to do with every code
+
+Sorted by what the right response actually is, rather than by number.
+
+### Retry with exponential backoff
+
+`429`, `500`, `503`, `504`, `551`, `552`, `554`, `556`, `557`, `558`, `561`, `562`, `563`, `565`, `567`
+
+These are transient. The same request may well succeed later. Use the loop in [Retry Strategies](#retry-strategies) below, with these adjustments:
+
+- **`557`:** retry once immediately before backing off. It usually clears on the next attempt.
+- **`565`:** wait at least 10 seconds before the first retry.
+- **`562` and `563`:** recovery depends on a third party, so allow a ceiling of 30 to 60 seconds rather than a few seconds.
+- **`429`:** back off until your request rate is under the limit for your plan. More attempts will not help.
+
+### Change the request, then retry
+
+`406`, `507`
+
+The request as sent will keep failing, but a narrower one will succeed. Reduce `page-size`, shorten the date range, or split the query, then send it again.
+
+### Fix something, then retry once
+
+`400` fix the parameters. `401` fix the API key. `402` check `error_message` to see which of the three causes applies, then raise your spending limit, upgrade your plan, or resume your subscription. `452` send an honest `User-Agent`.
+
+### Do not retry
+
+`403`, `410`, `416`, `501`, `570`
+
+These are stable answers, not failures in progress. Retrying returns exactly the same thing. `410` means the endpoint or chain is gone for good, so remove the call and any scheduled job that makes it. `501` means the capability does not exist on that chain, so check `/v1/chains/` and skip it. `570` means the contract reverted, which is a real answer about the contract.
+
+> **Note:** **None of this costs credits.** Error responses are not billed, so the cost of a retry is only the rate limit slot it consumes and the latency it adds. Optimize your retry policy for recovery time and for not amplifying an incident, not for spend.
 
 ## Rate Limits
 
@@ -595,9 +683,17 @@ Rate limits are enforced **per API key and IP address**. When you exceed your li
 
 ### Exponential Backoff with Jitter
 
-For transient errors (`429`, `500`, `503`), implement exponential backoff with random jitter to avoid thundering herd problems.
+Retry on the transient set only, and use exponential backoff with random jitter so that many clients recovering from the same incident do not retry in lockstep.
+
+A retry loop written against `429`, `500` and `503` alone will miss most of what the API actually returns under load, because the specific codes above are used in preference to a generic `500`. Include them explicitly.
 
 ```typescript TypeScript
+// Transient: a later attempt may succeed with the same request.
+const RETRYABLE = new Set([
+  429, 500, 503, 504,
+  551, 552, 554, 556, 557, 558, 561, 562, 563, 565, 567,
+]);
+
 async function fetchWithRetry(
   url: string,
   options: RequestInit,
@@ -619,6 +715,12 @@ import time
 import random
 import requests
 
+# Transient: a later attempt may succeed with the same request.
+RETRYABLE = {
+    429, 500, 503, 504,
+    551, 552, 554, 556, 557, 558, 561, 562, 563, 565, 567,
+}
+
 def fetch_with_retry(url, headers, max_retries=5):
     for attempt in range(max_retries):
         response = requests.get(url, headers=headers)
@@ -626,8 +728,10 @@ def fetch_with_retry(url, headers, max_retries=5):
         if response.ok:
             return response
 
-        if response.status_code in (429, 500, 503):
-            base_delay = (2 ** attempt)
+        if response.status_code in RETRYABLE:
+            # 565 means indexing is a few seconds behind the chain tip,
+            # so give it a floor of 10s rather than retrying immediately.
+            base_delay = 10 if response.status_code == 565 else (2 ** attempt)
             jitter = random.uniform(0, 1)
             time.sleep(base_delay + jitter)
             continue
@@ -637,26 +741,11 @@ def fetch_with_retry(url, headers, max_retries=5):
     raise Exception("Max retries exceeded")
 ```
 
+> **Warning:** Never put `403`, `410`, `416`, `501` or `570` in a backoff loop. They are stable answers about the request, the chain or the contract, so every attempt returns the same thing while still consuming a rate limit slot. See [What to do with every code](#what-to-do-with-every-code) for the codes that are worth one retry after you fix something.
+
 ### SDK Built-in Retries
 
-The [GoldRush TypeScript Client SDK](https://www.npmjs.com/package/@covalenthq/client-sdk) handles retries and rate limiting automatically — no manual retry logic needed when using the SDK.
-
-### Streaming Reconnection
-
-The GoldRush Client SDK manages WebSocket reconnection automatically. If you're using a custom [`graphql-ws`](https://github.com/enisdenjo/graphql-ws) client, configure the `shouldRetry` option:
-
-```typescript
-import { createClient } from "graphql-ws";
-
-const client = createClient({
-  url: "wss://streaming.goldrushdata.com/graphql",
-  connectionParams: {
-    GOLDRUSH_API_KEY: "YOUR_API_KEY_HERE",
-  },
-  shouldRetry: () => true,
-  retryAttempts: 5,
-});
-```
+The [GoldRush TypeScript Client SDK](https://www.npmjs.com/package/@covalenthq/client-sdk) handles retries and rate limiting automatically - no manual retry logic needed when using the SDK.
 
 ## Debugging Tips
 
@@ -668,26 +757,24 @@ GoldRush API keys follow the pattern `cqt_wF...` or `cqt_rQ...` (26 base58 chara
   
 ### Check supported chains
 
-A `404` error often means the chain is unsupported. See **Supported Chains** for the full list.
+An unsupported or misspelled chain returns `501`, not `404`, with `"Chain  not supported."` in `error_message`. A `404` on a chain-scoped path usually means the record was not found, not that the chain is wrong. See **Supported Chains** for the full list.
 
   
 ### Inspect the full error body
 
-Don't rely on the HTTP status code alone. The JSON response body contains an `error_message` field with specific details about what went wrong.
+Don't rely on the HTTP status code alone. The JSON response body contains an `error_message` field with specific details about what went wrong. This matters most for `402` and `501`, where one status code covers several unrelated causes that only the message distinguishes.
 
   
-### Test with curl or websocat
+### Test with curl
 
 Isolate issues from your application code by testing directly:
 
     ```bash
     # Foundational API
     curl -X GET https://api.covalenthq.com/v1/eth-mainnet/address/demo.eth/balances_v2/ \
-         -u YOUR_API_KEY_HERE: \
+         -u : \
          -H 'Content-Type: application/json'
     ```
-
-    For the Streaming API, use [websocat](https://github.com/vi/websocat) — see the **Streaming API Authentication** guide for setup steps.
 
   
 ### Monitor credit usage
@@ -695,9 +782,13 @@ Isolate issues from your application code by testing directly:
 Track your API credit consumption on the [GoldRush Platform dashboard](https://goldrush.dev/platform) to avoid unexpected `402` errors.
 
   
-### Contact support for persistent 500/503 errors
+### Contact support for persistent server-side errors
 
-If you're consistently hitting `500` or `503` errors, reach out to **support@covalenthq.com** with your API key prefix, the endpoint, and timestamps of the failures.
+If you're consistently hitting `500`, `503`, or any of the GoldRush-specific `5xx` codes after backing off, open a ticket on the [GoldRush support page](https://goldrush.dev/platform/support/) with your API key prefix, the endpoint, the exact `error_code` and `error_message`, and timestamps of the failures.
+
+    The support form asks for the endpoint and chain directly, so filing there routes the issue faster than describing it in free text.
+
+    Include the exact code. `556` and `565` in particular point at very different causes from a generic `500`, and quoting the number shortens the diagnosis considerably.
 
 ## Quick Reference
 
@@ -705,10 +796,6 @@ If you're consistently hitting `500` or `503` errors, reach out to **support@cov
 ### Foundational API Auth
 
 API key setup, authentication methods, and SDK usage.
-
-### Streaming API Auth
-
-WebSocket authentication and connection management.
 
 ### FAQ
 
@@ -733,14 +820,17 @@ GoldRush offers the most comprehensive Blockchain Data API suite for developers,
 The GoldRush API provides fast, accurate, and developer-friendly access to the essential onchain data for building DeFi dashboards, wallets, trading bots, AI Agents, tax and compliance platforms. 
 
 ### Do I need API keys to use GoldRush?
-Yes, you need an API key to access the GoldRush API. Your API Key is available on the **GoldRush platform** when you sign up for an account.
+Yes. The credential you need depends on the product:
+
+- **API key** (read-only) - covers the Foundational API, CLI, and x402.
+
+It's available on the [GoldRush platform](https://goldrush.dev/platform) once you sign up.
 
 ### If a client asks how to verify that GoldRush API is real-time or low-latency, how can we demonstrate or prove that?
 
 You can demonstrate real-time or low-latency capabilities through:
 * Timestamp validation: Pull `/v1/{chain_id}/block_v2/latest/` and compare the block timestamp with the current time (should be sub-second to a few seconds behind depending on chain).
-* Latency benchmarks: Use tools like curl or Postman to measure API response time. GoldRush's streaming endpoints often respond in under 400ms for supported chains.
-* Streaming demos: If using the Streaming API, show live updates of token transfers or block finality in dev dashboards.
+* Latency benchmarks: Use tools like curl or Postman to measure API response time.
 
 ### Besides the common 401, 402, and 429 error codes, are there any other error responses we should be aware of?
 
@@ -781,21 +871,27 @@ Rate limits are enforced per API key and IP, and requests exceeding limits recei
 * Projects requiring priority support
 * Companies with compliance or reliability requirements
 
-You can start with Vibe Coding and upgrade to Professional as your project scales.
+You can start with Vibe Coding and upgrade to Professional as your project scales. For a full breakdown of plans, the free trial, and credit-based [GoldRush API pricing](https://goldrush.dev/pricing/), see the pricing page.
 
 ### Can I upgrade from Vibe Coding to Professional?
 
 Yes. You can upgrade at any time from the [GoldRush platform](https://goldrush.dev/platform). Your API key stays the same, so no code changes are needed.
 
-## Streaming API Questions
+### Does GoldRush support Hyperliquid?
 
-### How does the Streaming API work?
-The Streaming API uses WebSocket connections to provide real-time updates about blockchain events. It maintains a persistent connection and pushes structured data to subscribed clients as events occur.
+Yes. GoldRush supports Hyperliquid's native chain (HyperCore) with zero rate limits. You can stream real-time fills, liquidations, funding rates, vault actions, delegations, deposits, withdrawals, and OHLCV pricing data for all Hyperliquid markets - including data not available through the public Hyperliquid API.
+
+GoldRush runs dedicated Hyperliquid nodes in Tokyo with a private backbone for low-latency data ingestion. See the **HyperCore chain page** for full details and code examples.
 
 ### What are Redstone Bolt price feeds?
 
-Redstone Bolt provides ultra-low-latency CEX price data for 9 major tokens on MegaETH, including BTC, ETH, SOL, BNB, XRP, ADA, DOGE, USDT, and USDC. Prices are updated every **2.4 ms** (~400 updates/sec), sourced from Binance, Coinbase, OKX, Bitget, and Kraken via Bolt nodes co-located with MegaETH sequencer infrastructure. Bolt-powered feeds use the `REDSTONE-` prefix (e.g. `REDSTONE-BTC`, `REDSTONE-ETH`). You can consume these prices through the **OHLCV Tokens Stream** on the `MEGAETH_MAINNET` chain — see that page for the full list of supported feeds.
+Redstone Bolt provides ultra-low-latency CEX price data for 9 major tokens on MegaETH, including BTC, ETH, SOL, BNB, XRP, ADA, DOGE, USDT, and USDC. Prices are updated every **2.4 ms** (~400 updates/sec), sourced from Binance, Coinbase, OKX, Bitget, and Kraken via Bolt nodes co-located with MegaETH sequencer infrastructure. Bolt-powered feeds use the `REDSTONE-` prefix (e.g. `REDSTONE-BTC`, `REDSTONE-ETH`).
 
-### What types of events can I subscribe to?
+---
 
-See all available streams on the **Streaming API Overview**.
+## Not finding answers?
+
+- ****Error Handling & Troubleshooting**** — Debug issues and retry strategies
+- ****What is GoldRush**** — Understand the core platform
+- ****GoldRush SDKs & CLI**** — Get started with code
+- ****Powered by GoldRush**** — See real-world examples

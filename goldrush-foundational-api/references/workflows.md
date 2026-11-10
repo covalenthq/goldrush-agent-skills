@@ -124,16 +124,6 @@ This section covers common errors for frequently used endpoints.
 - Solution: Each trace flag adds 0.05 credits. Only on Foundational chains.
 - Example: Base: 0.1 | With traces: 0.25 credits
 
-### Wallet Activity Stream
-
-**1. WebSocket connection failed**
-- Solution: Verify URL (wss://streaming.goldrushdata.com/graphql) and auth header
-- Example: Header: `Authorization: Bearer YOUR_API_KEY`
-
-**2. Subscription not receiving data**
-- Solution: Use enum format: `ETH_MAINNET` not `eth-mainnet`. Check chain supports Streaming.
-- Example: GraphQL: `ETH_MAINNET` | REST: `eth-mainnet`
-
 ### General Tips
 - Always check `response.error` field before accessing `response.data`
 - Chain names are case-sensitive: use exact values from Chain Capabilities Matrix
