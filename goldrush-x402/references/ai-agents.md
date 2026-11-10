@@ -2,10 +2,10 @@
 
 ## Agent Workflow
 
-1. **Discover** — Call free discovery API to find endpoints
-2. **Evaluate** — Search and check pricing before committing
-3. **Pay** — Sign payment and get data in single request-response cycle
-4. **Consume** — Parse standard GoldRush JSON responses
+1. **Discover** - Call free discovery API to find endpoints
+2. **Evaluate** - Search and check pricing before committing
+3. **Pay** - Sign payment and get data in single request-response cycle
+4. **Consume** - Parse standard GoldRush JSON responses
 
 ## x402 vs API Key for Agents
 
@@ -13,7 +13,7 @@
 |---------|---------|------|
 | Provisioning | Requires signup, key management | Wallet is the credential |
 | Budget control | Monthly plan, overage charges | Pay exactly per request |
-| Human involvement | Account creation, billing setup | None — fully autonomous |
+| Human involvement | Account creation, billing setup | None -fully autonomous |
 | Discovery | Read docs or hardcode endpoints | Programmatic endpoint discovery |
 | Multi-agent | Share key or provision per agent | Each agent gets its own wallet |
 
@@ -58,19 +58,27 @@ The agent can compare credit rates against its budget and select the right tier 
 Using the x402 client, the agent signs a payment and gets data in a single request-response cycle:
 
 ```typescript
-import { HTTPClient } from "@x402/core";
+import { x402Client } from "@x402/core/client";
 import { ExactEvmScheme } from "@x402/evm";
+import { wrapFetchWithPayment } from "@x402/fetch";
+import { privateKeyToAccount } from "viem/accounts";
 
-const client = new HTTPClient({
-  scheme: new ExactEvmScheme({
-    network: "eip155:84532", // Base Sepolia (testnet)
-    privateKey: process.env.WALLET_PRIVATE_KEY,
-  }),
-});
-
-const balances = await client.get(
-  "https://x402.goldrush.dev/v1/eth-mainnet/address/0x742d.../balances_v2/"
+const client = new x402Client().register("eip155:84532",
+  new ExactEvmScheme(privateKeyToAccount(process.env.WALLET_PRIVATE_KEY))
 );
+
+const paidFetch = wrapFetchWithPayment(fetch, client);
+
+const response = await paidFetch(
+  "https://x402.goldrush.dev/v1/eth-mainnet/address/aave.eth/balances_v2/"
+);
+
+const balances = await response.json();
+
+console.log(JSON.stringify({
+  headers: Object.fromEntries(response.headers.entries()),
+  body: balances,
+}, null, 2));
 ```
 
 No OAuth, no API key provisioning - the agent just needs a funded wallet.

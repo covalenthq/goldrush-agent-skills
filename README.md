@@ -10,7 +10,9 @@ Browse the full agent directory at [goldrush.dev/agents](https://goldrush.dev/ag
 | Skill | Description |
 |-------|-------------|
 | **[goldrush-foundational-api](goldrush-foundational-api/)** | REST API for historical and near-real-time data across 100+ chains — balances, transactions, NFTs, prices |
-| **[goldrush-streaming-api](goldrush-streaming-api/)** | Real-time GraphQL subscriptions over WebSocket — OHLCV candles, DEX pairs, wallet activity |
+| **[goldrush-hyperliquid](goldrush-hyperliquid/)** | Complete data layer for Hyperliquid (HyperCore + HIP-3 + HyperEVM) — wire-compatible Info API and WebSocket with no rate limits, l2Book/l4Book order books |
+| **[goldrush-json-rpc](goldrush-json-rpc/)** | Multi-chain EVM and Solana JSON-RPC with full archive depth, `debug_*`/`trace_*` namespaces and an analytics-driven upstream router |
+| **[goldrush-solana](goldrush-solana/)** | GoldRush API for Solana — SPL token balances for Solana wallets |
 | **[goldrush-cli](goldrush-cli/)** | Terminal-first blockchain data tool with MCP support for Claude Desktop and Claude Code |
 | **[goldrush-x402](goldrush-x402/)** | Pay-per-request blockchain data via the x402 protocol — no API key, no signup, just a funded wallet |
 
@@ -41,12 +43,27 @@ goldrush-foundational-api/
     ├── integration-guide.md
     └── workflows.md
 
-goldrush-streaming-api/
+goldrush-hyperliquid/
 ├── SKILL.md              ← entry point
 └── references/
     ├── overview.md
-    ├── endpoints.md
-    └── sdk-guide.md
+    ├── info-api.md
+    ├── websocket-api.md
+    └── streaming.md
+
+goldrush-json-rpc/
+├── SKILL.md              ← entry point
+└── references/
+    ├── overview.md
+    ├── quickstart.md
+    ├── methods.md
+    └── methods-solana.md
+
+goldrush-solana/
+├── SKILL.md              ← entry point
+└── references/
+    ├── overview.md
+    └── foundational.md
 
 goldrush-x402/
 ├── SKILL.md              ← entry point
@@ -68,7 +85,9 @@ Ask your agent:
 |----------|-------|
 | Ad-hoc terminal queries, MCP integration | **goldrush-cli** |
 | Historical data, batch queries, REST endpoints | **goldrush-foundational-api** |
-| Real-time price feeds, live DEX monitoring, streaming | **goldrush-streaming-api** |
+| Hyperliquid order books, HIP-3 markets, real-time HyperCore streams | **goldrush-hyperliquid** |
+| Raw EVM or Solana JSON-RPC, archive nodes, traces | **goldrush-json-rpc** |
+| Solana wallet SPL token balances | **goldrush-solana** |
 | Autonomous agents, no API key, pay-per-request | **goldrush-x402** |
 
 ## Supported Chains

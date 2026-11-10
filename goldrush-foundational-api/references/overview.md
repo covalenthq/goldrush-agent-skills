@@ -14,6 +14,8 @@
 
 ---
 
+The Foundational API delivers refined, structured data - not raw RPC responses. Every response includes decoded event logs, token metadata, scaled amounts, and USD pricing. **Learn how our Medallion Architecture works →**
+
 ## Use Cases
 
   
@@ -49,27 +51,27 @@ This quickstart guide walks through using the **GoldRush TypeScript SDK** to qui
 
 ## Prerequisites
 
-Using any of the GoldRush developer tools requires an API key.
+Using any of the GoldRush developer tools requires an API key. Start on the free tier and [compare plans and pricing](https://goldrush.dev/pricing/) before you scale.
 
 ### Vibe Coders
 
-$10/mo — Built for solo builders and AI-native workflows.
+$10/mo - Built for solo builders and AI-native workflows.
 
 ### Teams
 
-$250/mo — Production-grade with 50 RPS and priority support.
+$250/mo - Production-grade with 50 RPS and priority support.
 
 ## Supported Chains
 
 GoldRush can be used with any of the supported chains. See the full list, including chain categorization, at [Supported Chains](https://goldrush.dev/chains/).
 
-Some data enrichments such as internal transactions and historical balance fetches are only available for Foundational Chains.
+> **Note:** Some data enrichments such as internal transactions and historical balance fetches are only available for Foundational Chains.
 
 ## Using the GoldRush TypeScript SDK
 
-The GoldRush TypeScript SDK is the fastest way to integrate the GoldRush APIs for working with blockchain data. The SDK works with all supported chains including Mainnets and Testnets.
+The GoldRush TypeScript SDK is the fastest way to integrate the GoldRush APIs for working with blockchain data. The SDK works with all supported chains.
 
-This SDK requires NodeJS v18 or above.
+> **Note:** This SDK requires NodeJS v18 or above.
 
 ### Step 1. Install the SDK
 
@@ -97,7 +99,7 @@ import { GoldRushClient } from "@covalenthq/client-sdk";
 import { GoldRushClient } from "@covalenthq/client-sdk";
 
 const ApiServices = async () => {
-    const client = new GoldRushClient("YOUR_API_KEY"); 
+    const client = new GoldRushClient(""); 
 };
 ```
 
@@ -105,14 +107,14 @@ const ApiServices = async () => {
 
 In this quickstart, we use the `BalanceService` and `getTokenBalancesForWalletAddress()` function to fetch all token balances held by an address. This function takes a chain name and wallet address as required arguments. 
 
-ENS resolution is supported for `eth-mainnet`.
+> **Note:** ENS resolution is supported for `eth-mainnet`.
 
 ```typescript
 import { GoldRushClient } from "@covalenthq/client-sdk";
 
 const ApiServices = async () => {
     // Replace with your GoldRush API key
-    const client = new GoldRushClient("YOUR_API_KEY"); 
+    const client = new GoldRushClient(""); 
     const response = await client.BalanceService.getTokenBalancesForWalletAddress("eth-mainnet", "demo.eth"); 
     
     if (!response.error) {
@@ -177,11 +179,19 @@ To begin, register for an API key at the [GoldRush Platform](https://goldrush.de
 
 ### Vibe Coders
 
-$10/mo — Built for solo builders and AI-native workflows.
+$10/mo - Built for solo builders and AI-native workflows.
 
 ### Teams
 
-$250/mo — Production-grade with 50 RPS and priority support.
+$250/mo - Production-grade with 50 RPS and priority support.
+
+### API Key Format
+
+A GoldRush API key is prefixed with `cqt_` (or `ckey_` for legacy keys), followed by 26 base58 characters - for example, `cqt_wF…` or `cqt_rQ…`. The same key works across every GoldRush product: Foundational, JSON-RPC, Hyperliquid, and x402.
+
+> **Note:** Throughout these docs, the placeholder `` marks where to substitute your own key. Replace the entire token, including the angle brackets, with your real `cqt_…` key (or read it from a `GOLDRUSH_API_KEY` environment variable, as shown in the code samples). Never commit a real key to source control.
+
+> **Warning:** Your API key is a **server-side secret**. For client-side apps (browser, mobile) or WebSocket connections where the credential would be exposed to end users, do **not** embed your API key - mint a short-lived **Ephemeral Key** from it instead. Ephemeral Keys are scoped to your API key, expire in 30 minutes, and are safe to leak.
 
 ## 2. Supplying the API Key
 
@@ -191,12 +201,14 @@ The Foundational API offers flexible and powerful ways to access blockchain data
 
 For easier integration and to take advantage of built-in features like automatic retries and rate limit handling, we recommend using the TypeScript Client SDK.
 
+### TypeScript
+
 Initialize the client with your API key:
 ```typescript
 import { GoldRushClient } from "@covalenthq/client-sdk";
 
 const ApiServices = async () => {
-    const client = new GoldRushClient("YOUR_API_KEY_HERE"); // Replace with your GoldRush API key
+    const client = new GoldRushClient(""); // Replace with your GoldRush API key
     const resp = await client.BalanceService.getTokenBalancesForWalletAddress({
         chainName: "eth-mainnet",
         walletAddress: "vitalik.eth"
@@ -222,7 +234,7 @@ Provide your API key as the Basic Auth username. You do not need to provide a pa
 
 ```bash
 curl -X GET https://api.covalenthq.com/v1/eth-mainnet/address/demo.eth/balances_v2/ \
-     -u YOUR_API_KEY_HERE: \
+     -u : \
      -H 'Content-Type: application/json'
 ```
 
@@ -232,7 +244,7 @@ Provide your API key in an `Authorization` header with the `Bearer` scheme.
 
 ```bash
 curl -X GET https://api.covalenthq.com/v1/eth-mainnet/address/demo.eth/balances_v2/ \
-     -H 'Authorization: Bearer YOUR_API_KEY_HERE'
+     -H 'Authorization: Bearer '
 ```
 
 ### Query Parameter
@@ -240,7 +252,7 @@ curl -X GET https://api.covalenthq.com/v1/eth-mainnet/address/demo.eth/balances_
 Include your API key as the `key` query parameter in the request URL.
 
 ```bash
-curl -X GET "https://api.covalenthq.com/v1/eth-mainnet/address/demo.eth/balances_v2/?key=YOUR_API_KEY_HERE"
+curl -X GET "https://api.covalenthq.com/v1/eth-mainnet/address/demo.eth/balances_v2/?key="
 ```
 
 ## Error Handling

@@ -9,7 +9,7 @@
 | **MCP Setup** | `goldrush install` (registers as tool for Claude) |
 | **Commands** | 17 commands across portfolio, market, trading, and utilities |
 | **Chains** | 100+ chains (same as Foundational API) |
-| **Streaming** | Real-time data via Streaming API for `new_pairs`, `ohlcv_pairs`, `watch` |
+| **Real-time** | Live data commands: `new_pairs`, `ohlcv_pairs`, `watch` |
 
 ---
 
@@ -92,7 +92,7 @@ npx @covalenthq/goldrush-cli auth
 
 This prompts you for your API key and stores it securely in your OS keychain (not a config file).
 
-After the first run, you can use `goldrush` directly without `npx`.
+> **Note:** After the first run, you can use `goldrush` directly without `npx`.
 
 ## Query Wallet Balances
 
@@ -124,17 +124,13 @@ goldrush install
 
 That's it. Claude can now call GoldRush commands directly - no wrappers or manual JSON configuration needed. This works with both Claude Desktop and Claude Code.
 
-For manual MCP configuration (Cursor, Windsurf, or custom setups), see the **MCP Server docs**.
+> **Note:** For manual MCP configuration (Cursor, Windsurf, or custom setups), see the **MCP Server docs**.
 
 ## What's Next
 
 ### Command Reference
 
 Full reference for all 17 CLI commands with usage examples.
-
-### Streaming API
-
-The real-time data layer that powers `new_pairs`, `ohlcv_pairs`, and `watch`.
 
 ---
 
@@ -174,7 +170,7 @@ goldrush watch
 goldrush watch 0xbaed383ede0e5d9d72430661f3285daa77e9439f base-mainnet
 ```
 
-This is the command you leave running in a tmux pane. It streams continuously until you stop it.
+> **Note:** This is the command you leave running in a tmux pane. It streams continuously until you stop it.
 
 ## Market Discovery
 
